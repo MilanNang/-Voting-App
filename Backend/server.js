@@ -6,9 +6,9 @@ const cors = require('cors');
 
 
 app.use(cors({
-    origin: "voting-app-eight-eta.vercel.app",
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true
+    origin: "https://voting-app-eight-eta.vercel.app",
+    methods: ["GET,POST,PUT,DELETE"],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 const bodyparser=require('body-parser');
