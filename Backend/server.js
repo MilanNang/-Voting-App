@@ -4,6 +4,7 @@ require('dotenv').config();
 const db=require('./DataBase/db');
 const cors = require('cors');
 
+const PORT=process.env.PORT ||3000;
 
 app.use(cors({
     origin: "https://voting-app-eight-eta.vercel.app",
@@ -13,7 +14,7 @@ app.use(cors({
 
 const bodyparser=require('body-parser');
 app.use(bodyparser.json());
-const PORT=process.env.PORT ||3000;
+
 
 
 const userRoutes=require('./routes/userRoutes');
