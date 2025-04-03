@@ -3,6 +3,7 @@ import axios from "axios";
 import { Dialog } from "@headlessui/react";
 import { Pencil, Trash2 } from "lucide-react";
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+import EditCandidate from "./EditCandidate";
 
 
 const Home = () => {
@@ -86,7 +87,7 @@ const Home = () => {
           <Dialog.Panel className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
             <Dialog.Title className="text-lg font-semibold mb-4">Edit Candidate</Dialog.Title>
             {selectedCandidate && (
-              <EditCandidateForm
+              <EditCandidate
                 candidate={selectedCandidate}
                 onClose={() => setOpen(false)}
                 refresh={fetchCandidates}
