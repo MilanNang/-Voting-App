@@ -80,7 +80,7 @@ const Signup = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:3000/user/signup', {
+      const res = await axios.post(`${BASE_URL}/user/signup`, {
         ...formData,
         aatharCardNumber: rawAadhar,
       });
