@@ -70,7 +70,7 @@ router.put('/:id', jwtAuthMiddleware, upload.single('photo'), async (req, res) =
       const updatedCandidate = await CandidatData.findByIdAndUpdate(
         candidateId,
         updateData,
-        { new: true } // <-- returns the updated document
+        { new: true } 
       );
   
       if (!updatedCandidate) {
@@ -86,7 +86,7 @@ router.put('/:id', jwtAuthMiddleware, upload.single('photo'), async (req, res) =
   
   
 
-router.delete('/:candidateId',jwtAuthMiddleware,async(req,res)=>{
+router.delete('/:candidateId',upload.single('photo'),jwtAuthMiddleware,async(req,res)=>{
     try {
         
         if(!(await chechuse(req.user.id)))
