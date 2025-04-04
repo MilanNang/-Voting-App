@@ -35,7 +35,7 @@ const Home = () => {
   const handleDelete = async (candidateId) => {
     if (!window.confirm("Are you sure you want to delete this candidate?")) return;
     try {
-      await axios.delete(`/candidate/${candidateId}`, {
+      await axios.delete(`${BASE_URL}/candidate/${candidateId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       fetchCandidates();

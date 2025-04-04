@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 
 const EditCandidate = ({ candidate, onClose, refresh }) => {
   const [name, setName] = useState(candidate.name);
@@ -15,7 +17,7 @@ const EditCandidate = ({ candidate, onClose, refresh }) => {
       formData.append("party", party);
       if (image) formData.append("image", image);
 
-      await axios.put(`/candidate/${candidate._id}`, formData, {
+      await axios.put(`${BASE_URL}/candidate/${candidate._id}`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "multipart/form-data",
