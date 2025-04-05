@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -34,7 +35,7 @@ const Signup = () => {
 
       if (value === 'admin') {
         try {
-          const res = await axios.get('/user/exists');
+          const res = await axios.get(`${BASE_URL}/user/exists`);
           if (res.data.exists) {
             alert('An admin already exists. You cannot register as admin.');
             setIsAdminAllowed(false);
@@ -82,7 +83,7 @@ const Signup = () => {
     }
 
     try {
-      const res = await axios.post('/user/signup', {
+      const res = await axios.post(`${BASE_URL}/user/signup`, {
         ...formData,
         aatharCardNumber: rawAadhar,
       });

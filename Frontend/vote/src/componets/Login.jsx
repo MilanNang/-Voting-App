@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Login = () => {
   const [aatharCardNumber, setAadhar] = useState('');
@@ -27,7 +28,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post('/user/login', {
+      const res = await axios.post(`${BASE_URL}/user/login`, {
         aatharCardNumber: aatharCardNumber.replace(/\s/g, ''),
         password,
       });
