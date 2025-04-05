@@ -42,7 +42,7 @@ const Login = () => {
       if (user.role === 'admin') {
         navigate("/home");
       } else {
-        navigate("/userhome");
+        navigate("/homeuser");
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong');
