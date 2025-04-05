@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-const BASE_URL = import.meta.env.VITE_BACKEND_URL;
-
-
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -16,26 +13,28 @@ const Signup = () => {
     password: '',
     roal: 'voter',
   });
-  const usenavigate=useNavigate();
+
   const [isAdminAllowed, setIsAdminAllowed] = useState(true);
+  const [loading, setLoading] = useState(false); 
+  const usenavigate = useNavigate();
+
   const handleChange = async (e) => {
     const { name, value } = e.target;
-  
+
     // Aadhar formatting in 4-4 group
     if (name === 'aatharCardNumber') {
       const raw = value.replace(/\D/g, '').slice(0, 12);
       const formatted = raw.replace(/(.{4})/g, '$1 ').trim();
       setFormData((prev) => ({ ...prev, [name]: formatted }));
     }
-  
+
     // Admin role check
     else if (name === 'roal') {
       setFormData((prev) => ({ ...prev, [name]: value }));
-    
+
       if (value === 'admin') {
         try {
-          const res = await axios.get(`${BASE_URL}/user/exists`); 
-                    
+          const res = await axios.get('/user/exists');
           if (res.data.exists) {
             alert('An admin already exists. You cannot register as admin.');
             setIsAdminAllowed(false);
@@ -48,49 +47,58 @@ const Signup = () => {
           setIsAdminAllowed(false);
         }
       } else {
-        setIsAdminAllowed(true); // Reset if switching back to voter
+        setIsAdminAllowed(true);
       }
     }
-    
-  
-    // ✅ Add this to handle all other fields (like name, email, etc.)
+
+
     else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); 
+
     const rawAadhar = formData.aatharCardNumber.replace(/\s/g, '');
 
     if (formData.age < 18) {
       alert('You must be 18 years old or older to signup');
+      setLoading(false);
       return;
     }
 
     if (rawAadhar.length !== 12) {
       alert('Aadhar Card Number must be 12 digits');
+      setLoading(false);
       return;
     }
 
     if (formData.roal === 'admin' && !isAdminAllowed) {
       alert('Admin registration is not allowed.');
+      setLoading(false);
       return;
     }
 
     try {
-      const res = await axios.post(`${BASE_URL}/user/signup`, {
+      const res = await axios.post('/user/signup', {
         ...formData,
         aatharCardNumber: rawAadhar,
       });
 
       localStorage.setItem('token', res.data.token);
-      window.dispatchEvent(new Event("authChanged")); // if you use auth listener
-  
-      console.log('JWT Token:', res.data.token);
-      usenavigate('/');
-      // alert('Signup successful!');
+      localStorage.setItem('role', formData.roal);
+      window.dispatchEvent(new Event('authChanged'));
+
+      localStorage.setItem(
+        'signupData',
+        JSON.stringify({
+          aatharCardNumber: rawAadhar,
+          password: formData.password,
+        })
+      );
+
       setFormData({
         name: '',
         age: '',
@@ -101,10 +109,8 @@ const Signup = () => {
         password: '',
         roal: 'voter',
       });
-      localStorage.setItem("signupData", JSON.stringify({
-        aatharCardNumber: rawAadhar,
-        password: formData.password
-      }));
+
+      usenavigate('/');
     } catch (error) {
       if (error.response) {
         alert(error.response.data.message || 'Signup failed');
@@ -112,12 +118,22 @@ const Signup = () => {
         alert('Something went wrong');
         console.error(error);
       }
+    } finally {
+      setLoading(false);
     }
-   
   };
- 
-  
-  
+
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-400 to-purple-100">
+        <div className="text-3xl font-semibold text-gray-800 animate-pulse">
+          Creating Account...
+        </div>
+      </div>
+    );
+  }
+
 
   return (
     <div className="min-h-screen pt-28 pb-24 px-4 flex justify-center items-start bg-gradient-to-br from-gray-400 to-purple-100">

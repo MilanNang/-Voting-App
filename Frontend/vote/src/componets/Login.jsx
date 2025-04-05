@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-const BASE_URL = import.meta.env.VITE_BACKEND_URL;
-
 
 const Login = () => {
   const [aatharCardNumber, setAadhar] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false); 
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const Login = () => {
     if (prefillData) {
       setAadhar(prefillData.aatharCardNumber || '');
       setPassword(prefillData.password || '');
-      localStorage.removeItem("signupData"); // Clear after use
+      localStorage.removeItem("signupData");
     }
   }, []);
 
@@ -24,9 +24,10 @@ const Login = () => {
     e.preventDefault();
     setError('');
     setMessage('');
+    setLoading(true);
 
     try {
-      const res = await axios.post(`${BASE_URL}/user/login`, {
+      const res = await axios.post('/user/login', {
         aatharCardNumber: aatharCardNumber.replace(/\s/g, ''),
         password,
       });
@@ -35,18 +36,29 @@ const Login = () => {
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('role', user.role);
-
       window.dispatchEvent(new Event("authChanged"));
-      if(user.role=='admin'){
+
+      if (user.role === 'admin') {
         navigate("/home");
-      }
-      else{
-      navigate("/homeuser");
+      } else {
+        navigate("/userhome");
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong');
+    } finally {
+      setLoading(false); 
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-bl from-gray-100 via-gray-200 to-gray-300">
+        <div className="text-3xl font-semibold text-gray-800 animate-pulse">
+          Logging In...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pt-28 pb-24 px-4 flex justify-center items-start bg-gradient-to-bl from-gray-100 via-gray-200 to-gray-300">
