@@ -40,7 +40,7 @@ const Login = () => {
       window.dispatchEvent(new Event("authChanged"));
 
       if (user.role === 'admin') {
-        navigate("/home");
+        navigate("/");
       } else {
         navigate("/homeuser");
       }

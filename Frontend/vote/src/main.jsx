@@ -16,9 +16,9 @@ const router=createBrowserRouter(
   createRoutesFromElements(
      
     <Route path='/' element={<App />}>
-        <Route path='/' element={<Login />} /> 
+        <Route path='/login' element={<Login />} /> 
         <Route path='/signup' element={<Signup />} />
-        <Route path='/home' element={<Home />} />
+        <Route path='/' element={<Home />} />
         <Route path='/addCandidate' element={<AddCandidate />} />
         <Route path='/homeuser' element={< HomeUser/>} />
         <Route path='/vote' element={< VoteCount/>} />

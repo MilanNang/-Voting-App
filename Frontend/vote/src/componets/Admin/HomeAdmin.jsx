@@ -5,17 +5,19 @@ import { Pencil, Trash2 } from "lucide-react";
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 import EditCandidate from "./EditCandidate";
 
-
 const Home = () => {
   const [candidates, setCandidates] = useState([]);
   const [userRole, setUserRole] = useState("");
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [open, setOpen] = useState(false);
+  const [userToken, setUserToken] = useState(null);
 
   useEffect(() => {
     fetchCandidates();
     const role = localStorage.getItem("role");
+    const token = localStorage.getItem("token");
     setUserRole(role);
+    setUserToken(token);
   }, []);
 
   const fetchCandidates = async () => {
@@ -45,8 +47,20 @@ const Home = () => {
   };
 
   return (
+    <>
+   
+    
     <div className="min-h-screen pt-24 pb-16 px-4 bg-gradient-to-br from-[#1e293b] to-[#0f172a] text-white">
+    <div className="flex items-center justify-center mb-1">
+        {!userToken && (
+              <p className="text-yellow-400 font-medium mt-4">
+                Please Login  to give your vote
+              
+              </p>
+            )}
+    </div>
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+         
         {candidates.map((candidate) => (
           <div
             key={candidate._id}
@@ -61,6 +75,8 @@ const Home = () => {
               <h3 className="text-2xl font-semibold text-indigo-300 drop-shadow-md mb-2">{candidate.name}</h3>
               <p className="text-md text-gray-300 font-bold">{candidate.party}</p>
             </div>
+
+            {/* Admin buttons */}
             {userRole === "admin" && (
               <div className="flex gap-2">
                 <button
@@ -76,6 +92,16 @@ const Home = () => {
                   <Trash2 size={16} />
                 </button>
               </div>
+            )}
+
+           
+            {userToken && userRole !== "admin" && (
+              <button
+                className="bg-green-600 px-4 py-2 rounded text-white font-semibold hover:bg-green-700 transition mt-4"
+                onClick={() => alert("Voting logic goes here")}
+              >
+                Vote
+              </button>
             )}
           </div>
         ))}
@@ -97,7 +123,9 @@ const Home = () => {
         </div>
       </Dialog>
     </div>
+  </>
   );
 };
+
 
 export default Home;

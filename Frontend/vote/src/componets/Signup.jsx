@@ -111,7 +111,7 @@ const Signup = () => {
         roal: 'voter',
       });
 
-      usenavigate('/');
+      usenavigate('/login');
     } catch (error) {
       if (error.response) {
         alert(error.response.data.message || 'Signup failed');

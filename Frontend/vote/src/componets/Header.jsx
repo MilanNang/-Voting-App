@@ -42,7 +42,7 @@ function Header() {
     setIsAdmin(false);
     setIsMobileMenuOpen(false);
     window.dispatchEvent(new Event("authChanged"));
-    navigate('/');
+    navigate('/login');
   };
 
   return (
@@ -56,7 +56,7 @@ function Header() {
         <nav className="hidden md:flex space-x-8 items-center text-sm font-medium text-gray-300">
           {!isLoggedIn ? (
             <>
-              <Link to="/" className="hover:text-white transition">Login</Link>
+              <Link to="/login" className="hover:text-white transition">Login</Link>
               <Link to="/signup" className="bg-white text-gray-900 px-4 py-2 rounded hover:bg-gray-100 transition">
                 Sign Up
               </Link>
@@ -65,7 +65,7 @@ function Header() {
             <>
               {isAdmin ? (
                 <>
-                  <Link to="/home" className="hover:text-white transition"> Home</Link>
+                  <Link to="/" className="hover:text-white transition"> Home</Link>
                   <Link to="/AddCandidate" className="hover:text-white transition">Add Candidate</Link>
                 </>
               ) : (
@@ -96,7 +96,7 @@ function Header() {
         <div ref={menuRef} className="md:hidden px-4 pb-4 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 text-gray-300">
           {!isLoggedIn ? (
             <>
-              <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block py-2 hover:text-white">Login</Link>
+              <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="block py-2 hover:text-white">Login</Link>
               <Link to="/signup" onClick={() => setIsMobileMenuOpen(false)} className="block py-2 text-center mt-2 bg-white text-gray-900 rounded">
                 Sign Up
               </Link>
@@ -105,7 +105,7 @@ function Header() {
             <>
               {isAdmin ? (
                 <>
-                  <Link to="/home" onClick={() => setIsMobileMenuOpen(false)} className=" block py-1.5 mb-2 text-black text-center w-full h-[35px] rounded hover:bg-sky-400 bg-sky-200"> Home</Link>
+                  <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className=" block py-1.5 mb-2 text-black text-center w-full h-[35px] rounded hover:bg-sky-400 bg-sky-200"> Home</Link>
                   <Link to="/AddCandidate" onClick={() => setIsMobileMenuOpen(false)} className="block py-1.5 mb-2 text-black text-center w-full h-[35px] rounded hover:bg-sky-400  bg-sky-200">Add Candidate</Link>
                 </>
               ) : (

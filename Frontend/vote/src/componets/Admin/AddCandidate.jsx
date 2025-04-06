@@ -47,7 +47,7 @@ const AddCandidate = () => {
        
        
       });
-      navigate('/home');
+      navigate('/');
     } catch (err) {
       console.error('Error adding candidate', err);
     }
