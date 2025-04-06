@@ -52,7 +52,7 @@ This is a MERN stack voting application that allows users to vote for candidates
    ```
 3. Create a `.env` file:
    ```env
-   VITE_BACKEND_URL=https://your-backend-url
+   VITE_BACKEND_URL=https://voting-app-backend-vc9y.onrender.com
    ```
 4. Start the frontend:
    ```bash
