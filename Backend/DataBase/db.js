@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
- const mongoUrl = process.env.MONGODB_URL;
-// const mongoUrl = process.env.MONGODB_URL_LOCAL;
+ //const mongoUrl = process.env.MONGODB_URL;
+const mongoUrl = process.env.MONGODB_URL_LOCAL;
 
 if (!mongoUrl) {
     console.error(" MongoDB URI is missing. Check your .env file.");

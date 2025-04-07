@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Signup = () => {
@@ -16,20 +17,36 @@ const Signup = () => {
   });
 
   const [isAdminAllowed, setIsAdminAllowed] = useState(true);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const usenavigate = useNavigate();
+
+  const aadharRef = useRef(null);
 
   const handleChange = async (e) => {
     const { name, value } = e.target;
 
-    // Aadhar formatting in 4-4 group
+    // Handle Aadhar formatting
     if (name === 'aatharCardNumber') {
-      const raw = value.replace(/\D/g, '').slice(0, 12);
-      const formatted = raw.replace(/(.{4})/g, '$1 ').trim();
+      const input = aadharRef.current;
+      const selectionStart = input.selectionStart;
+
+      // Clean raw input
+      const rawDigits = value.replace(/\D/g, '').slice(0, 12);
+      const formatted = rawDigits.replace(/(.{4})/g, '$1 ').trim();
+
+      // Handle cursor position
+      const numSpacesBefore = (formData.aatharCardNumber.slice(0, selectionStart).match(/ /g) || []).length;
+      const numSpacesAfter = (formatted.slice(0, selectionStart).match(/ /g) || []).length;
+      let newCursorPos = selectionStart + (numSpacesAfter - numSpacesBefore);
+
       setFormData((prev) => ({ ...prev, [name]: formatted }));
+
+      setTimeout(() => {
+        input.setSelectionRange(newCursorPos, newCursorPos);
+      }, 0);
     }
 
-    // Admin role check
+    // Handle role change (check if admin allowed)
     else if (name === 'roal') {
       setFormData((prev) => ({ ...prev, [name]: value }));
 
@@ -52,7 +69,7 @@ const Signup = () => {
       }
     }
 
-
+    // Handle all other fields
     else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -60,7 +77,7 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); 
+    setLoading(true);
 
     const rawAadhar = formData.aatharCardNumber.replace(/\s/g, '');
 
@@ -124,7 +141,6 @@ const Signup = () => {
     }
   };
 
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-400 to-purple-100">
@@ -134,7 +150,6 @@ const Signup = () => {
       </div>
     );
   }
-
 
   return (
     <div className="min-h-screen pt-28 pb-24 px-4 flex justify-center items-start bg-gradient-to-br from-gray-400 to-purple-100">
@@ -152,6 +167,7 @@ const Signup = () => {
               type: 'text',
               placeholder: 'Aadhar Card Number',
               maxLength: 14,
+              ref: aadharRef,
             },
             { name: 'password', type: 'password', placeholder: 'Password' },
           ].map((field) => (
@@ -164,6 +180,7 @@ const Signup = () => {
               maxLength={field.maxLength}
               value={formData[field.name]}
               onChange={handleChange}
+              ref={field.name === 'aatharCardNumber' ? aadharRef : null}
               className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-400"
             />
           ))}
