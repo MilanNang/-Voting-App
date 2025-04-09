@@ -20,7 +20,7 @@ function Header() {
     checkLogin();
     window.addEventListener('authChanged', checkLogin);
 
-    // 👇 Close mobile menu on outside click
+  
     const handleClickOutside = (e) => {
       if (isMobileMenuOpen && menuRef.current && !menuRef.current.contains(e.target)) {
         setIsMobileMenuOpen(false);
@@ -52,7 +52,7 @@ function Header() {
           <Link to="/" className="hover:text-gray-300 transition" onClick={() => setIsMobileMenuOpen(false)}>VoteWise</Link>
         </div>
 
-        {/* Desktop Nav */}
+     
         <nav className="hidden md:flex space-x-8 items-center text-sm font-medium text-gray-300">
           {!isLoggedIn ? (
             <>

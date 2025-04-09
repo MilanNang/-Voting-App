@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { CheckCircle } from "lucide-react";
+
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
-
-const VoterHome = () => {
+const HomeUser = () => {
   const [candidates, setCandidates] = useState([]);
   const [votedCandidateId, setVotedCandidateId] = useState(null);
 
+ 
   useEffect(() => {
+    const storedVote = localStorage.getItem("votedCandidateId");
+    if (storedVote) {
+      setVotedCandidateId(storedVote);
+    }
     fetchCandidates();
   }, []);
 
   const fetchCandidates = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/candidate/`);
-      console.log(res.data);
       setCandidates(res.data);
     } catch (err) {
       console.error("Error fetching candidates", err);
@@ -24,10 +28,15 @@ const VoterHome = () => {
 
   const handleVote = async (candidateId) => {
     try {
-      const res = await axios.post(`${BASE_URL}/candidate/vote/${candidateId}`, {}, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const res = await axios.post(
+        `${BASE_URL}/candidate/vote/${candidateId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setVotedCandidateId(candidateId);
+      localStorage.setItem("votedCandidateId", candidateId); 
       fetchCandidates();
       alert(res.data.message);
     } catch (err) {
@@ -41,7 +50,9 @@ const VoterHome = () => {
       {candidates.map((candidate) => (
         <div
           key={candidate._id}
-          className={`rounded-2xl shadow-lg border p-6 flex bg-gray-700 gap-6 min-h-[180px] items-center justify-between transition-all duration-300 transform hover:scale-105 hover:shadow-xl border-gray-600 ${votedCandidateId === candidate._id ? 'border-green-500' : ''}`}
+          className={`rounded-2xl shadow-lg border p-6 flex bg-gray-700 gap-6 min-h-[180px] items-center justify-between transition-all duration-300 transform hover:scale-105 hover:shadow-xl border-gray-600 ${
+            votedCandidateId === candidate._id ? "border-green-500" : ""
+          }`}
         >
           <div className="flex flex-col flex-1 justify-center">
             <h3 className="text-2xl font-semibold text-gray-200 mb-2">{candidate.name}</h3>
@@ -56,7 +67,11 @@ const VoterHome = () => {
             <button
               onClick={() => handleVote(candidate._id)}
               disabled={votedCandidateId !== null}
-              className={`px-6 py-2 font-semibold rounded-full transition-all duration-300 flex items-center gap-2 ${votedCandidateId === candidate._id ? 'bg-green-600 text-white cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 active:scale-95'} disabled:opacity-50`}
+              className={`px-6 py-2 font-semibold rounded-full transition-all duration-300 flex items-center gap-2 ${
+                votedCandidateId === candidate._id
+                  ? "bg-green-600 text-white cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700 active:scale-95"
+              } disabled:opacity-50`}
             >
               {votedCandidateId === candidate._id ? (
                 <span className="flex items-center gap-2 animate-pulse">
@@ -73,4 +88,4 @@ const VoterHome = () => {
   );
 };
 
-export default VoterHome;
+export default HomeUser;

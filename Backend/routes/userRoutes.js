@@ -2,9 +2,6 @@ const express=require('express');
 const router=express.Router();
 const {jwtAuthMiddleware,generateToken} = require('../Middleware/jwt');
 const User=require('../Models/user');
-const nodemailer = require('nodemailer');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
 
 
@@ -68,25 +65,25 @@ router.post('/login', async (req, res) => {
     try {
       const { aatharCardNumber, password } = req.body;
   
-      // 1. Find user by Aadhar number
+      // Find user by Aadhar number
       const user = await User.findOne({ aatharCardNumber });
   
-      // 2. Check if user exists and password matches
+      //  Check if user exists and password matches
       if (!user || !(await user.comparePassword(password))) {
         return res.status(401).json({ message: 'Invalid Aadhar number or password' });
       }
   
-      // 3. Create JWT payload
+      //  Create JWT payload
       const payload = {
         id: user._id,
         name: user.name,
         role: user.roal,
       };
   
-      // 4. Generate JWT token
-      const token = generateToken(payload); // Your custom token generator
+      //  Generate JWT token
+      const token = generateToken(payload); 
   
-      // 5. Respond with token and optional user info
+      // Respond with token and optional user info
       return res.json({
         message: 'Login successful',
         token,
@@ -125,7 +122,7 @@ router.get('/exists', async (req, res) => {
       const admin = await User.findOne({ roal: 'admin' });
   
       if (admin) {
-        return res.json({ exists: true }); // <-- This is important
+        return res.json({ exists: true });
       }
   
       res.json({ exists: false });
@@ -137,30 +134,39 @@ router.get('/exists', async (req, res) => {
   
 
 
-router.put('/profile/password',jwtAuthMiddleware,async (req,res) => {
-    try {
 
-      const userId = req.user.id;
-        const {CurrentPassword,newPassword}=req.body;
-        
-        const user= await User.findById(userId);
 
-        if(!(await user.comparePassword(CurrentPassword))){
-            res.status(401).json({message:'Invalid UserName or Password'});
+router.put('/password',jwtAuthMiddleware,async (req,res)=>{
    
-        }
+try{
 
-        user.password=newPassword;
-        await user.save();
+  const {aatharCardNumber,newPassword}=req.body;
 
-        console.log('password Cnhange');
-        res.status(200).json({message:'Password changed successfully'});
+  
+if (!aatharCardNumber || !newPassword) {
+  return res.status(400).json({ message: 'Missing Aadhar number or new password' });
+}
+   const user=await User.findOne({aatharCardNumber});
 
-        
-    } catch (error) {
-        res.status(500).json({error:'Internal Server Error'});
-    }
-    
+  
+
+   
+   if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+
+   user.password=newPassword;
+   await user.save();
+
+   res.status(200).json({message:'Password changed successfully'});
+  }
+  catch(error){
+
+    res.status(500).json({error:'Internal Server Error'}); 
+  }
+
+
 
 })
 

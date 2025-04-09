@@ -24,8 +24,8 @@ const EditCandidate = ({ candidate, onClose, refresh }) => {
         },
       });
 
-      refresh(); // Refresh candidates list
-      onClose(); // Close modal
+      refresh(); 
+      onClose(); 
     } catch (err) {
       console.error("Error updating candidate", err);
     }
@@ -48,7 +48,7 @@ const EditCandidate = ({ candidate, onClose, refresh }) => {
           />
         </div>
 
-        {/* Party Input */}
+        
         <div>
           <label className="text-gray-300 font-semibold block mb-1">Party:</label>
           <input
@@ -60,7 +60,7 @@ const EditCandidate = ({ candidate, onClose, refresh }) => {
           />
         </div>
 
-        {/* Image Upload */}
+        
         <div>
           <label className="text-gray-300 font-semibold block mb-1">Party Logo:</label>
           <input
@@ -70,7 +70,7 @@ const EditCandidate = ({ candidate, onClose, refresh }) => {
           />
         </div>
 
-        {/* Action Buttons */}
+        
         <div className="flex justify-end gap-3 mt-5">
           <button
             type="button"

@@ -136,7 +136,7 @@ router.post('/vote/:candidateId',jwtAuthMiddleware, async (req,res) => {
         user.isVoted=true;
         await user.save();
         await candidate.save();
-//cendite save must;
+
         return res.status(200).json({ message: 'Vote recorded successfully' });
        
 
@@ -172,10 +172,10 @@ router.get('/vote/count' ,async (req,res) => {
 // Get List of all candidates with only name and party fields
 router.get('/', async (req, res) => { 
     try {
-      const candidates = await CandidatData.find(); // Includes _id
+      const candidates = await CandidatData.find();
   
       const modifiedCandidates = candidates.map(candidate => ({
-        _id: candidate._id, // Include _id for frontend usage
+        _id: candidate._id, 
         name: candidate.name,
         party: candidate.party,
         image: candidate.image.startsWith('data:image')

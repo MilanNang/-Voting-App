@@ -20,7 +20,7 @@ const jwtAuthMiddleware = (req,res,next) =>{
          req.user=decode;
          next();
     } catch (error) {
-        console.error(err);
+        console.error(error);
         res.status(401).json({ error: 'Invalid token' });
     }
 

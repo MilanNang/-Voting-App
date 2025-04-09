@@ -10,7 +10,7 @@ import AddCandidate from './componets/Admin/AddCandidate.jsx'
 import HomeUser from './HomeUser.jsx'
 import VoteCount from './componets/VoteCount.jsx'
 import Profil from './componets/Profile.jsx'
-
+import ChangePassword from './componets/ChangPassword.jsx'
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +23,7 @@ const router=createBrowserRouter(
         <Route path='/homeuser' element={< HomeUser/>} />
         <Route path='/vote' element={< VoteCount/>} />
         <Route path="/profile" element={< Profil/>} />
+        <Route path="/changepassword" element={< ChangePassword/>} />
        
        
     </Route>

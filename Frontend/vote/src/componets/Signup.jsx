@@ -19,35 +19,25 @@ const Signup = () => {
   const [isAdminAllowed, setIsAdminAllowed] = useState(true);
   const [loading, setLoading] = useState(false);
   const usenavigate = useNavigate();
-
   const aadharRef = useRef(null);
 
   const handleChange = async (e) => {
     const { name, value } = e.target;
 
-    // Handle Aadhar formatting
     if (name === 'aatharCardNumber') {
       const input = aadharRef.current;
       const selectionStart = input.selectionStart;
 
-      // Clean raw input
       const rawDigits = value.replace(/\D/g, '').slice(0, 12);
       const formatted = rawDigits.replace(/(.{4})/g, '$1 ').trim();
 
-      // Handle cursor position
       const numSpacesBefore = (formData.aatharCardNumber.slice(0, selectionStart).match(/ /g) || []).length;
       const numSpacesAfter = (formatted.slice(0, selectionStart).match(/ /g) || []).length;
       let newCursorPos = selectionStart + (numSpacesAfter - numSpacesBefore);
 
       setFormData((prev) => ({ ...prev, [name]: formatted }));
-
-      setTimeout(() => {
-        input.setSelectionRange(newCursorPos, newCursorPos);
-      }, 0);
-    }
-
-    // Handle role change (check if admin allowed)
-    else if (name === 'roal') {
+      setTimeout(() => input.setSelectionRange(newCursorPos, newCursorPos), 0);
+    } else if (name === 'roal') {
       setFormData((prev) => ({ ...prev, [name]: value }));
 
       if (value === 'admin') {
@@ -67,10 +57,7 @@ const Signup = () => {
       } else {
         setIsAdminAllowed(true);
       }
-    }
-
-    // Handle all other fields
-    else {
+    } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
@@ -130,12 +117,7 @@ const Signup = () => {
 
       usenavigate('/login');
     } catch (error) {
-      if (error.response) {
-        alert(error.response.data.message || 'Signup failed');
-      } else {
-        alert('Something went wrong');
-        console.error(error);
-      }
+      alert(error?.response?.data?.message || 'Signup failed');
     } finally {
       setLoading(false);
     }
@@ -152,56 +134,67 @@ const Signup = () => {
   }
 
   return (
-    <div className="min-h-screen pt-28 pb-24 px-4 flex justify-center items-start bg-gradient-to-br from-gray-400 to-purple-100">
-      <div className="w-full max-w-md p-8 bg-gray-400 rounded-2xl shadow-xl">
-        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">Create Your Account</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {[
-            { name: 'name', type: 'text', placeholder: 'Full Name' },
-            { name: 'age', type: 'number', placeholder: 'Age' },
-            { name: 'mobile', type: 'text', placeholder: 'Mobile' },
-            { name: 'email', type: 'email', placeholder: 'Email' },
-            { name: 'address', type: 'text', placeholder: 'Address' },
-            {
-              name: 'aatharCardNumber',
-              type: 'text',
-              placeholder: 'Aadhar Card Number',
-              maxLength: 14,
-              ref: aadharRef,
-            },
-            { name: 'password', type: 'password', placeholder: 'Password' },
-          ].map((field) => (
-            <input
-              key={field.name}
-              name={field.name}
-              type={field.type}
-              placeholder={field.placeholder}
-              required={field.name !== 'mobile' && field.name !== 'address'}
-              maxLength={field.maxLength}
-              value={formData[field.name]}
+    <div className=" mt-[25px] min-h-screen bg-gradient-to-br from-purple-200 via-pink-100 to-blue-100 flex items-center justify-center px-4 py-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 bg-white/40 backdrop-blur-md rounded-3xl shadow-xl overflow-hidden w-full max-w-5xl">
+        
+      
+        <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-br from-purple-400 to-indigo-500 text-white p-10">
+          <h2 className="text-4xl font-bold mb-4">Welcome to VoteX</h2>
+          <p className="text-lg text-center">Register to cast your vote and make a difference.</p>
+         
+        </div>
+
+        
+        <div className="p-8 md:p-12 bg-white rounded-3xl">
+          <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Create Account</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {[
+              { name: 'name', type: 'text', placeholder: 'Full Name' },
+              { name: 'age', type: 'number', placeholder: 'Age' },
+              { name: 'mobile', type: 'text', placeholder: 'Mobile Number' },
+              { name: 'email', type: 'email', placeholder: 'Email Address' },
+              { name: 'address', type: 'text', placeholder: 'Address' },
+              {
+                name: 'aatharCardNumber',
+                type: 'text',
+                placeholder: 'Aadhar Card Number',
+                maxLength: 14,
+                ref: aadharRef,
+              },
+              { name: 'password', type: 'password', placeholder: 'Password' },
+            ].map((field) => (
+              <input
+                key={field.name}
+                name={field.name}
+                type={field.type}
+                placeholder={field.placeholder}
+                required={field.name !== 'mobile' && field.name !== 'address'}
+                maxLength={field.maxLength}
+                value={formData[field.name]}
+                onChange={handleChange}
+                ref={field.name === 'aatharCardNumber' ? aadharRef : null}
+                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+              />
+            ))}
+
+            <select
+              name="roal"
+              value={formData.roal}
               onChange={handleChange}
-              ref={field.name === 'aatharCardNumber' ? aadharRef : null}
               className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-400"
-            />
-          ))}
+            >
+              <option value="voter">Voter</option>
+              <option value="admin">Admin</option>
+            </select>
 
-          <select
-            name="roal"
-            value={formData.roal}
-            onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-400"
-          >
-            <option value="voter">Voter</option>
-            <option value="admin">Admin</option>
-          </select>
-
-          <button
-            type="submit"
-            className="w-full bg-green-900 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition"
-          >
-            Sign Up
-          </button>
-        </form>
+            <button
+              type="submit"
+              className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-500 transition duration-300"
+            >
+              Sign Up
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

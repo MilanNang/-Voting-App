@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
- const mongoUrl = process.env.MONGODB_URL;
+  const mongoUrl = process.env.MONGODB_URL;
 // const mongoUrl = process.env.MONGODB_URL_LOCAL;
 
 if (!mongoUrl) {
@@ -19,7 +19,7 @@ mongoose.connect(mongoUrl)
 const db = mongoose.connection;
 
 db.on('disconnected', () => {
-    console.log('⚠️ MongoDB disconnected');
+    console.log(' MongoDB disconnected');
 });
 
 module.exports = db;
