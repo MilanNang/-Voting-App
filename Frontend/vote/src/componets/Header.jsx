@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -109,11 +110,11 @@ function Header() {
                   <Link to="/AddCandidate" onClick={() => setIsMobileMenuOpen(false)} className="block py-1.5 mb-2 text-black text-center w-full h-[35px] rounded hover:bg-sky-400  bg-sky-200">Add Candidate</Link>
                 </>
               ) : (
-                <Link to="/homeuser" onClick={() => setIsMobileMenuOpen(false)} className="block mb-1.5 mt-1.5 py-1.5 text-black  text-center w-full h-[35px] rounded hover:bg-sky-400 bg-sky-200"> Home</Link>
+                <Link to="/homeuser" onClick={() => setIsMobileMenuOpen(false)} className="block mb-2 py-1.5 text-black  text-center w-full h-[35px] rounded hover:bg-sky-400 bg-sky-200"> Home</Link>
               )}
-              <Link to="/profile" className=" rounded my-1.5 h-[35px] py-1.5 block text-black w-full  hover:bg-sky-400 bg-sky-200 text-center ">Profile</Link>
+              <Link to="/profile" className="rounded my-1.5 h-[35px] py-1.5 block text-black w-full  hover:bg-sky-400 bg-sky-200 text-center ">Profile</Link>
               <Link to="/vote" onClick={() => setIsMobileMenuOpen(false)} className="rounded text-black text-center block py-1.5 transition w-full h-[35px] hover:bg-sky-400 bg-sky-200 ">Vote</Link>
-              <button onClick={handleLogout} className="block py-2 text-center mt-2 w-full bg-red-400 hover:bg-red-600 text-gray-900 rounded-3xl">
+              <button onClick={handleLogout} className="block py-2 text-center mt-2 w-full bg-red-400 hover:bg-red-600 text-gray-900 rounded">
                 Logout
               </button>
             </>
