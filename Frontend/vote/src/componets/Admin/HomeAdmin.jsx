@@ -49,7 +49,7 @@ const Home = () => {
       console.error("Error deleting candidate", err);
     }
   };
-  if (loading) {
+  if (loding) {
   return (
     <div className="grid grid-cols-1 gap-6 p-6 mt-20 bg-gradient-to-br from-gray-900 to-gray-800 min-h-screen text-white transition-all duration-500">
       {Array.from({ length: 3 }).map((_, i) => (
