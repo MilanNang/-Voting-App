@@ -11,6 +11,7 @@ const Home = () => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [open, setOpen] = useState(false);
   const [userToken, setUserToken] = useState(null);
+  const [loding,setLoding]=useState(false)
 
   useEffect(() => {
     fetchCandidates();
@@ -22,10 +23,13 @@ const Home = () => {
 
   const fetchCandidates = async () => {
     try {
+      setLoding(true)
       const res = await axios.get(`${BASE_URL}/candidate/`);
       setCandidates(res.data);
     } catch (err) {
       console.error("Error fetching candidates", err);
+    }finally{
+      setLoding(false)
     }
   };
 
@@ -45,6 +49,28 @@ const Home = () => {
       console.error("Error deleting candidate", err);
     }
   };
+  if (loading) {
+  return (
+    <div className="grid grid-cols-1 gap-6 p-6 mt-20 bg-gradient-to-br from-gray-900 to-gray-800 min-h-screen text-white transition-all duration-500">
+      {Array.from({ length: 3 }).map((_, i) => (
+        <div
+          key={i}
+          className="rounded-2xl shadow-lg border p-6 flex bg-gray-700 gap-6 min-h-[180px] items-center justify-between animate-pulse border-gray-600"
+        >
+          <div className="flex flex-col flex-1 gap-4">
+            <div className="w-3/4 h-6 bg-gray-600 rounded"></div>
+            <div className="w-1/2 h-4 bg-gray-600 rounded"></div>
+          </div>
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-24 h-24 bg-gray-600 rounded-full"></div>
+            <div className="w-24 h-10 bg-gray-600 rounded-full"></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 
   return (
     <>
